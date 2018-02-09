@@ -8,12 +8,12 @@ type Omit<T, K extends keyof T> = Pick<T, Diff<keyof T, K>>;
 /* ------------------------------------------------------------------------- */
 // Unwrapped component
 
-interface HelloProps {
+interface HelloProps extends InjectedBlueBackgroundProps {
   style?: React.CSSProperties;
   name: string;
 }
 
-const Hello = ({ style, name }: HelloProps & InjectedBlueBackgroundProps) => (
+const Hello = ({ style, name }: HelloProps) => (
   <div style={style}>Hello, {name}!</div>
 );
 
@@ -41,18 +41,16 @@ const getBlueShade = (shade?: ColorShade) => {
   }
 };
 
-const withBlueBackground = <P extends object>(
-  UnwrappedComponent: React.ComponentType<P & InjectedBlueBackgroundProps>
+const withBlueBackground = <P extends InjectedBlueBackgroundProps>(
+  UnwrappedComponent: React.ComponentType<P>
 ) =>
   class WithBlueBackground extends React.Component<
-    P & WithBlueBackgroundProps
+    Omit<P, keyof InjectedBlueBackgroundProps> & WithBlueBackgroundProps
   > {
     render() {
+      const { shade, ...props } = this.props;
       return (
-        <UnwrappedComponent
-          {...this.props}
-          backgroundColor={getBlueShade(this.props.shade)}
-        />
+        <UnwrappedComponent {...props} backgroundColor={getBlueShade(shade)} />
       );
     }
   };
@@ -60,7 +58,7 @@ const withBlueBackground = <P extends object>(
 /* ------------------------------------------------------------------------- */
 // Usage
 
-const BlueHello = withBlueBackground<HelloProps>(Hello);
+const BlueHello = withBlueBackground(Hello);
 ReactDOM.render(
   <BlueHello name="Bob" shade="dark" style={{ fontWeight: 'bold' }} />,
   document.getElementById('app')

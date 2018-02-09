@@ -46,11 +46,9 @@ const withBlueBackground = <P extends InjectedBlueBackgroundProps>(
     Subtract<P, InjectedBlueBackgroundProps> & WithBlueBackgroundProps
   > {
     render() {
+      const { shade, ...props } = this.props;
       return (
-        <UnwrappedComponent
-          {...this.props}
-          backgroundColor={getBlueShade(this.props.shade)}
-        />
+        <UnwrappedComponent {...props} backgroundColor={getBlueShade(shade)} />
       );
     }
   };
