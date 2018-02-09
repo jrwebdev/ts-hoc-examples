@@ -18,7 +18,7 @@ const Hello = ({ style, name }: HelloProps) => (
 
 type ColorShade = 'light' | 'dark';
 
-interface InjectedBlueBackgroundProps {
+export interface InjectedBlueBackgroundProps {
   style?: React.CSSProperties;
 }
 

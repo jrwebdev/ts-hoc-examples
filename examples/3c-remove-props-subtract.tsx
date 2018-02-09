@@ -1,15 +1,17 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { Subtract } from 'utility-types';
+
 /* ------------------------------------------------------------------------- */
 // Unwrapped component
 
-interface HelloProps {
+interface HelloProps extends InjectedBlueBackgroundProps {
   style?: React.CSSProperties;
   name: string;
 }
 
-const Hello = ({ style, name }: HelloProps & InjectedBlueBackgroundProps) => (
+const Hello = ({ style, name }: HelloProps) => (
   <div style={style}>Hello, {name}!</div>
 );
 
@@ -37,11 +39,11 @@ const getBlueShade = (shade?: ColorShade) => {
   }
 };
 
-const withBlueBackground = <P extends object>(
-  UnwrappedComponent: React.ComponentType<P & InjectedBlueBackgroundProps>
+const withBlueBackground = <P extends InjectedBlueBackgroundProps>(
+  UnwrappedComponent: React.ComponentType<P>
 ) =>
   class WithBlueBackground extends React.Component<
-    P & WithBlueBackgroundProps
+    Subtract<P, InjectedBlueBackgroundProps> & WithBlueBackgroundProps
   > {
     render() {
       return (
@@ -56,7 +58,7 @@ const withBlueBackground = <P extends object>(
 /* ------------------------------------------------------------------------- */
 // Usage
 
-const BlueHello = withBlueBackground<HelloProps>(Hello);
+const BlueHello = withBlueBackground(Hello);
 ReactDOM.render(
   <BlueHello name="Bob" shade="dark" style={{ fontWeight: 'bold' }} />,
   document.getElementById('app')
