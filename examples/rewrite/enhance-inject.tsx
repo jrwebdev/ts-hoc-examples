@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Subtract } from 'utility-types';
 
-interface InjectedCounterProps {
+export interface InjectedCounterProps {
   value: number;
   onIncrement(): void;
   onDecrement(): void;
@@ -16,7 +16,7 @@ interface MakeCounterState {
   value: number;
 }
 
-const withLoading = <P extends InjectedCounterProps>(
+const makeCounter = <P extends InjectedCounterProps>(
   Component: React.ComponentType<P>
 ) =>
   class MakeCounter extends React.Component<
